@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forestvpn_test/presentations/screens/home_page.dart';
+import 'package:forestvpn_test/repositories/news/mock_news_repository.dart';
+
+import 'logic/bloc/news_bloc.dart';
 
 void main() {
-  runApp(const ForestVPNTestApp());
+  runApp(const NewsApp());
 }
 
-class ForestVPNTestApp extends StatelessWidget {
-  const ForestVPNTestApp({Key? key}) : super(key: key);
+class NewsApp extends StatelessWidget {
+  const NewsApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'ForestVPN test',
-      home: Scaffold(
-        body: Center(
-          child: Text('News screen'),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NewsBloc(repository: MockNewsRepository())..add(GetNewsEvent()),
         ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'News app',
+        theme: ThemeData(
+          textTheme: ThemeData.light().textTheme.apply(
+                fontFamily: 'SF Pro Display',
+              ),
+        ),
+        home: const HomePage(),
       ),
     );
   }
